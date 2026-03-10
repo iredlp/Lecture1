@@ -18,7 +18,7 @@ class Prodotto:
 
     @classmethod
     def costruttore_con_quantita_uno(cls, name:str, price:float, supplier:str):
-        cls(name, price, quantity:1, supplier)
+        return cls(name, price, 1, supplier)
 
     @staticmethod
     def applica_sconto(prezzo, percentuale):
@@ -44,21 +44,31 @@ class Prodotto:
     def __eq__(self,other:object):
        if not isinstance(other,Prodotto):
            return NotImplemented
-        return (self.name==other.name
+       return (self.name==other.name
                 and self.price==other.price
                 and self.quantity==other.quantity
-                and self.supplier==other.supplier)
+                and self.supplier==other.supplier )
 
-    def __lt__(self, other:"Prodotto")--> bool:
+    def __lt__(self, other:"Prodotto")-> bool:
         return self.price<other.price
+
+#EREDITARIETA'
+class ProdottoScontato(Prodotto):
+    def __init__(self, name: str, price:float, quantity: int, supplier=str, sconto_percento=float ):
+        Prodotto.__init__()
+        #oppure se non mi ricordo da quale costruttore eredito posso fare
+        super().__init__(name, price, quantity, supplier)
+        self.sconto_percento=sconto_percento
+
+
 
 
 myproduct1= Prodotto(name="Laptop",price=1200.0, quantity=12,supplier="ABC")
 print(f"Nome prodotto: {myproduct1.name}-prezzo:{myproduct1.price}")
 
 print(f"Il totale loro di myproduct1 è {myproduct1.valore_lordo()}") #uso un metodo di istanza
-p3= Prodotto.costruttore_con_quantita_uno(name:"Auricolari", price: 200.0, supplier:"ABC") #Modo per chiamare metodo di classe
-print(f"Prezzo scontato di myproduct1{Prodotto.applica_sconto{ myproduct1.price, percentuale:0.15)}") #Modo per chiamare un metodo statico
+p3= Prodotto.costruttore_con_quantita_uno(name="Auricolari", price= 200.0, supplier="ABC") #Modo per chiamare metodo di classe
+#print(f"Prezzo scontato di myproduct1{Prodotto.applica_sconto{ myproduct1.price, percentuale:0.15)}") #Modo per chiamare un metodo statico
 
 myproduct2 = Prodotto(name="Mouse", price=10.0, quantity=25, supplier="CDE")
 print(f"Nome prodotto: {myproduct2.name}-prezzo:{myproduct2.price}")
@@ -94,14 +104,14 @@ class Cliente:
         #"Cliente Fulvio Binachi (Gold)-fulvio@google.com
         return f"Cliente{self.nome}{self.categoria}- {self.mail }"
 
-c1= Cliente(name: "Mario Bianchi", mail="mario.bianchi@polito.it",categoria="Gold")
-c2 = Cliente(name: "Carlo Maone", mail = "carlo.masone@polito.it", categoria = "Platinum")
+c1= Cliente(name= "Mario Bianchi", mail="mario.bianchi@polito.it",categoria="Gold")
+c2 = Cliente(name= "Carlo Maone", mail = "carlo.masone@polito.it", categoria = "Platinum")
 print(c1.descrzione())
 print(c2.descrzione())
 
 
-p_a= Prodotto("Laptop",price=1200.0, quantity=12,supplier="ABC")
-p_b=Prodotto(name:"Mouse", price=10.0, quantity=14, supplier="CDE")
+p_a= Prodotto(name="Laptop",price=1200.0, quantity=12,supplier="ABC")
+p_b=Prodotto(name="Mouse", price=10.0, quantity=14, supplier="CDE")
 
 print("myproduct1==p_a?",myproduct1==p_a) #va a chiamare il metdodo __eq__ appena implementto emi aspetto True
 print("p_a==p_b?",p_a==p_b) #Mi aspetto False
