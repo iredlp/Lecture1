@@ -15,9 +15,10 @@ class Prodotto:
         netto=self.valore_netto()
         lordo= netto*(1+self.aliquota_iva)
         return lordo
+
     @classmethod
     def costruttore_con_quantita_uno(cls, name:str, price:float, supplier:str):
-        cls(name,price, quantity:1, supplier)
+        cls(name, price, quantity:1, supplier)
 
     @staticmethod
     def applica_sconto(prezzo, percentuale):
@@ -32,7 +33,24 @@ class Prodotto:
             pass
         self._price=valore
 
+#PER ESSERE STAMPATO
+    def __str__(self): #rappresento in stringa
+        return f"{self.name}- disponibili{self.quantity}pezzi a {self.price}£"
 
+    #per stampare in modo più leggibile al programmatore
+    def __repr__(self):
+        return f"Prodotto(name= { self.name}, price= { self.price}, quantity= { self.quantity}, supplier={ self.supplier}) "
+
+    def __eq__(self,other:object):
+       if not isinstance(other,Prodotto):
+           return NotImplemented
+        return (self.name==other.name
+                and self.price==other.price
+                and self.quantity==other.quantity
+                and self.supplier==other.supplier)
+
+    def __lt__(self, other:"Prodotto")--> bool:
+        return self.price<other.price
 
 
 myproduct1= Prodotto(name="Laptop",price=1200.0, quantity=12,supplier="ABC")
@@ -76,7 +94,21 @@ class Cliente:
         #"Cliente Fulvio Binachi (Gold)-fulvio@google.com
         return f"Cliente{self.nome}{self.categoria}- {self.mail }"
 
-c1= Cliente(nome: "Mario Bianchi", mail="mario.bianchi@polito.it",categoria="Gold")
-c2 = Cliente(nome: "Carlo Maone", mail = "carlo.masone@polito.it", categoria = "Platinum")
+c1= Cliente(name: "Mario Bianchi", mail="mario.bianchi@polito.it",categoria="Gold")
+c2 = Cliente(name: "Carlo Maone", mail = "carlo.masone@polito.it", categoria = "Platinum")
 print(c1.descrzione())
 print(c2.descrzione())
+
+
+p_a= Prodotto("Laptop",price=1200.0, quantity=12,supplier="ABC")
+p_b=Prodotto(name:"Mouse", price=10.0, quantity=14, supplier="CDE")
+
+print("myproduct1==p_a?",myproduct1==p_a) #va a chiamare il metdodo __eq__ appena implementto emi aspetto True
+print("p_a==p_b?",p_a==p_b) #Mi aspetto False
+
+mylist=[p_a,p_b, myproduct1]
+mylist.sort() #se metto REVERSE==True inverte l'ordinamento
+print("lista di prodotti ordinata")
+for p in mylist:
+    print(f"-{p} ")
+print(mylist)
