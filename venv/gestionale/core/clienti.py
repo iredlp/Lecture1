@@ -27,7 +27,7 @@ class Cliente:
 @dataclass
 class ClienteRecord:
     name:str
-    email:str
+    mail:str
     categoria:str
 
 def _test_modulo():

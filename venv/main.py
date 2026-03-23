@@ -1,7 +1,11 @@
+#from datetime import date
 from venv.gestionale.core.prodotti import Prodotto, crea_prodotto_standard,ProdottoScontato,ProdottoRecord
 from venv.gestionale.core.clienti import Cliente, ClienteRecord
+#from venv.vendite.fatture import Fattura
 from venv.vendite.ordini import Ordine, OrdineConSconto, RigaOrdine
+import networkx as nx
 
+print("==============================================================")
 
 p1=Prodotto("Ebook Reader", price=120.0, quantity=1, supplier="AAA")
 p2= crea_prodotto_standard("Tablet", prezzo=750)
@@ -54,3 +58,6 @@ print(ordine_scontato)
 print("Totale netto sconto:", ordine_scontato.totale_netto())
 print("Totale lordo scontato:", ordine_scontato.totale_lordo(0.22))
 print("-----------------------------------------------------------------")
+
+#fattura = Fattura(ordine, "2026/01", date.today())
+#print(fattura.genera_fattura())

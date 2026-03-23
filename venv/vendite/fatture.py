@@ -1,0 +1,63 @@
+from dataclasses import dataclass
+from datetime import date
+
+from venv.gestionale.core.clienti import Cliente
+from venv.gestionale.core.prodotti import ProdottoRecord
+#from venv.main import ordine
+from venv.vendite.ordini import Ordine, RigaOrdine
+
+
+@dataclass
+class Fattura:
+    ordine: "Ordine"
+    numero_fattura: str
+    data: date
+
+    def genera_fattura(self):
+        linee=[
+            f"="*60, #ripeti 60 volte l'=
+            #intestazione della fattura, ovvero data e num fattura
+            f"Fattura numero.{self.numero_fattura}del {self.data}",
+            f"="*60,
+            #dettagli deò cliente
+            f"Cliente:{self.ordine.cliente.name}",
+            f"Categoria:{self.ordine.cliente.categoria}",
+            f"Mail:{self.ordine.cliente.mail}",
+              f"-"*60,
+            f"DETTAGLIO ORDINE"
+
+        ]
+        for i, riga in enumerate(self.ordine.righe):
+            linee.append(f"{i} "
+            f" {riga.prodotto.name}"
+            f"Quantità {riga.quantita} x {riga.prodotto.prezzo_unitario} ="
+            f" Tot. {riga.totale_riga()}"
+                         )
+
+        linee.extend([
+            f"-" * 60,
+            f"Totale netto:{ self.ordine.totale_netto()}",
+            f"IVA(22%):{self.ordine.totale_netto()*0.22}",
+            f"Totale lordo:{self.ordine.totale_lordo(0.22)}",
+            f"=" * 60]
+        )
+        return "\n".join(linee)
+
+def _test_modulo():
+
+    p1=ProdottoRecord("Laptop", 1200)
+    p2=ProdottoRecord("Mouse", 20)
+    p3=ProdottoRecord("Tablet", 600)
+
+    cliente= Cliente(name= "Mario Bianchi", mail=" mariobianchi@gmail.com", categoria= "Gold")
+    ordine=Ordine( righe=[
+        RigaOrdine(p1,1),
+        RigaOrdine(p2,5),
+        RigaOrdine(p3,2),
+    ], cliente=cliente)
+
+    fattura= Fattura(ordine, "2026/01", date.today())
+    print(fattura.genera_fattura())
+
+if __name__ == "__main__":
+    _test_modulo()
